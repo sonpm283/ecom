@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { getRules } from 'src/utils/rules'
 
 interface FormData {
   email: string
@@ -11,14 +12,21 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors }
   } = useForm<FormData>()
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data)
-  })
+  const rules = getRules(getValues)
 
-  console.log(errors)
+  const onSubmit = handleSubmit(
+    (data) => {
+      console.log(data)
+    },
+    () => {
+      const password = getValues('password')
+      console.log(password)
+    }
+  )
 
   return (
     <div className='bg-orange'>
@@ -33,16 +41,7 @@ export default function Register() {
                   type='email'
                   className='p-3 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm'
                   placeholder='Email'
-                  {...register('email', {
-                    required: {
-                      value: true,
-                      message: 'Email là bắt buộc'
-                    },
-                    pattern: {
-                      value: /^\S+@\S+\.\S+$/,
-                      message: 'Email không đúng định dạng'
-                    }
-                  })}
+                  {...register('email', rules.email)}
                 />
                 <div className='mt-1 text-red-600 min-h-[1.25rem] text-xs'>{errors.email?.message}</div>
               </div>
@@ -52,16 +51,8 @@ export default function Register() {
                   type='password'
                   className='p-3 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm'
                   placeholder='Nhập mật khẩu'
-                  {...register('password', {
-                    minLength: {
-                      value: 5,
-                      message: 'Tối thiểu 5 ký tự'
-                    },
-                    maxLength: {
-                      value: 160,
-                      message: 'Tối đa 60 ký tự'
-                    }
-                  })}
+                  autoComplete='on'
+                  {...register('password', rules.password)}
                 />
                 <div className='mt-1 text-red-600 min-h-[1.25rem] text-xs'>{errors.password?.message}</div>
               </div>
@@ -71,16 +62,8 @@ export default function Register() {
                   type='password'
                   className='p-3 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm'
                   placeholder='Nhập lại mật khẩu'
-                  {...register('confirm_password', {
-                    minLength: {
-                      value: 5,
-                      message: 'Tối thiểu 5 ký tự'
-                    },
-                    maxLength: {
-                      value: 160,
-                      message: 'Tối đa 60 ký tự'
-                    }
-                  })}
+                  autoComplete='on'
+                  {...register('confirm_password', { ...rules.confirm_password })}
                 />
                 <div className='mt-1 text-red-600 min-h-[1.25rem] text-xs'>{errors.confirm_password?.message}</div>
               </div>

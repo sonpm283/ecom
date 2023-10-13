@@ -1,12 +1,20 @@
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import { getRules } from 'src/utils/rules'
+
+interface FormData {
+  email: string
+  password: string
+}
 
 export default function Login() {
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm()
+  } = useForm<FormData>()
+
+  const rules = getRules()
 
   const onSubmit = handleSubmit((data) => {
     console.log(data)
@@ -23,20 +31,22 @@ export default function Login() {
               <div className='mt-8'>
                 <input
                   type='text'
-                  name='email'
                   className='p-3 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm'
                   placeholder='Email'
+                  {...register('email', rules.email)}
                 />
-                <div className='mt-1 text-red-600 min-h-[1.25rem] text-xs'>Email không hợp lệ</div>
+                <div className='mt-1 text-red-600 min-h-[1.25rem] text-xs'>{errors.email?.message}</div>
               </div>
 
               <div className='mt-3'>
                 <input
-                  type='text'
+                  type='password'
                   className='p-3 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm'
                   placeholder='Nhập mật khẩu'
+                  autoComplete='on'
+                  {...register('password', rules.password)}
                 />
-                <div className='mt-1 text-red-600 min-h-[1.25rem] text-xs'>Mật khẩu không hợp lệ</div>
+                <div className='mt-1 text-red-600 min-h-[1.25rem] text-xs'>{errors.password?.message}</div>
               </div>
 
               <div className='mt-4'>
