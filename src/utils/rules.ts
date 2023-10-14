@@ -68,6 +68,7 @@ export const getRules = (getValues?: UseFormGetValues<any>): Rules => ({
   }
 })
 
+// validate bằng Yup
 export const schema = yup
   .object({
     email: yup
