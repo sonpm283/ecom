@@ -1,21 +1,22 @@
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import Input from 'src/components/Input'
-import { getRules } from 'src/utils/rules'
+import { schema, Schema } from 'src/utils/rules'
+import { yupResolver } from '@hookform/resolvers/yup'
 
-interface FormData {
-  email: string
-  password: string
-}
+// pick kiểu cho login form chỉ bao gồm email và password
+type FormData = Pick<Schema, 'email' | 'password'>
+// chỉ cần pick email và password từ schema cho login form
+const loginSchema = schema.pick(['email', 'password'])
 
 export default function Login() {
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<FormData>()
 
-  const rules = getRules()
+    // lúc này thì sử dụng loginSchema làm đối số cho yupResolver
+  } = useForm<FormData>({ resolver: yupResolver(loginSchema) })
 
   const onSubmit = handleSubmit((data) => {
     console.log(data)
@@ -36,7 +37,6 @@ export default function Login() {
                 placeholder='Email'
                 register={register}
                 errorMessage={errors.email?.message}
-                rules={rules.email}
               />
 
               <Input
@@ -46,7 +46,7 @@ export default function Login() {
                 placeholder='Nhập mật khẩu'
                 register={register}
                 errorMessage={errors.password?.message}
-                rules={rules.password}
+                autoComplete='on'
               />
 
               <div className='mt-4'>
