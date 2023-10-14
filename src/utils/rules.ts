@@ -2,9 +2,16 @@ import { RegisterOptions, UseFormGetValues } from 'react-hook-form'
 
 // kiểu của options của register
 // quy định rõ ràng các key cần validate để khi rules.email | rules.password sẽ gợi ý
+
 type Rules = {
   [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions
 }
+//hoặc viết kiểu này:
+// type Rules = {
+//   email?: RegisterOptions
+//   password?: RegisterOptions
+//   confirm_password?: RegisterOptions
+// }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getRules = (getValues?: UseFormGetValues<any>): Rules => ({
