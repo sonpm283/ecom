@@ -6,12 +6,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { registerAccount } from 'src/apis/auth.api'
 import { omit } from 'lodash'
+import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
+import { ResponseApi } from 'src/types/utils.type'
 
 type FormData = Schema
 
 export default function Register() {
   const {
     register,
+    setError,
     handleSubmit,
     formState: { errors }
   } = useForm<FormData>({ resolver: yupResolver(schema) })
@@ -21,10 +24,37 @@ export default function Register() {
   })
 
   const onSubmit = handleSubmit((data) => {
+    //sử dụng omit của lodash để loại bỏ confirm_password(body gọi api register chỉ cần email và password)
     const body = omit(data, ['confirm_password'])
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
         console.log(data)
+      },
+      onError: (error) => {
+        if (isAxiosUnprocessableEntityError<ResponseApi<Omit<FormData, 'confirm_password'>>>(error)) {
+          const formError = error.response?.data.data
+
+          formError &&
+            Object.keys(formError).forEach((key) => {
+              //set LẠI error của các input tương ứng khi có message lỗi từ server trả về
+              setError(key as keyof Omit<FormData, 'confirm_password'>, {
+                message: formError[key as keyof Omit<FormData, 'confirm_password'>],
+                type: 'Server'
+              })
+            })
+
+          // formError?.email &&
+          //   setError('email', {
+          //     message: formError.email,
+          //     type: 'Server'
+          //   })
+
+          // formError?.password &&
+          //   setError('password', {
+          //     message: formError.password,
+          //     type: 'Server'
+          //   })
+        }
       }
     })
   })
@@ -54,7 +84,6 @@ export default function Register() {
                 errorMessage={errors.password?.message}
                 autoComplete='on'
               />
-
               <Input
                 className='mt-3'
                 type='password'
