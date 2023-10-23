@@ -1,6 +1,10 @@
-import { Link } from 'react-router-dom'
+import { Link, useMatch } from 'react-router-dom'
 
 export default function RegisterHeader() {
+  //nếu url match với '/register' thì sẽ tồn tại 1 object chứa thông tin params register
+  const registerMatch = useMatch('/register')
+  const isRegister = Boolean(registerMatch)
+
   return (
     <header className='py-5 sticky top-0 z-10 bg-white'>
       <div className='max-w-7xl mx-auto px-4'>
@@ -12,7 +16,7 @@ export default function RegisterHeader() {
               </g>
             </svg>
           </Link>
-          <span className='ml-5 text-xl lg:text-2xl'>Đăng ký</span>
+          <span className='ml-5 text-xl lg:text-2xl'>{isRegister ? 'Đăng ký' : 'Đăng nhập'}</span>
           <a
             href='https://help.shopee.vn/vn/s'
             className='self-center ml-auto text-[14px] text-orange'

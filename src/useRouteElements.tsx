@@ -6,15 +6,18 @@ import RegisterLayout from './layouts/RegisterLayout'
 import MainLayout from './layouts/MainLayout'
 import Profile from './components/Profile'
 
-const isAuthenticated = true
+import { useContext } from 'react'
+import { AppContext } from './contexts/app.context'
 
 // nếu isAuthenticated = true thì sẽ pass qua được ProtectedRoute và có thể truy cập được đến cái path(children) bên trong(các path cần phải đăng nhập mới vào được)
 function ProtectedRoute() {
+  const { isAuthenticated } = useContext(AppContext)
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
 }
 
 // nếu isAuthenticated = true thì sẽ không pass vào login và register nữa và navigate về /
 function RejectedRoute() {
+  const { isAuthenticated } = useContext(AppContext)
   return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
 }
 
