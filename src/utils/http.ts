@@ -2,7 +2,8 @@ import axios, { AxiosError, type AxiosInstance } from 'axios'
 import HttpStatusCode from 'src/constants/httpStatusCode.enum'
 import { toast } from 'react-toastify'
 import { AuthReponse } from 'src/types/auth.type'
-import { clearAccessTokenFromLS, getAccessTokenFromLS, saveAccessTokenToLS } from './auth'
+import { clearLS, getAccessTokenFromLS, saveAccessTokenToLS, setProfileToLS } from './auth'
+import path from 'src/constants/path'
 class Http {
   instance: AxiosInstance
   private accessToken: string
@@ -36,17 +37,19 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config
-        if (url === '/login' || url === '/register') {
+        if (url === path.login || url === path.register) {
           // ép kiểu response.data là AuthReponse(có 'message' và 'data' => kiểu response trả về từ api)
           // lưu vào ram
-          this.accessToken = (response.data as AuthReponse).data.access_token
-
+          const data = response.data as AuthReponse
+          this.accessToken = (data as AuthReponse).data.access_token
+          //khi đăng nhập thành công thì lưu thông tin user vào LS
+          setProfileToLS(data.data.user)
           // sau khi lấy được accessToken thì lưu vào local storage
           saveAccessTokenToLS(this.accessToken)
-        } else if (url === '/logout') {
+        } else if (url === path.logout) {
           // khi logout thì xoá khỏi local storage
           this.accessToken = ''
-          clearAccessTokenFromLS()
+          clearLS()
         }
         return response
       },
