@@ -5,12 +5,13 @@ import { schema, Schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { useMutation } from '@tanstack/react-query'
-import { login } from 'src/apis/auth.api'
+import { authApi } from 'src/apis/auth.api'
 import { ErrorResponse } from 'src/types/utils.type'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/components/Button'
 import path from 'src/constants/path'
+import { toast } from 'react-toastify'
 
 // pick kiểu cho login form chỉ bao gồm email và password
 type FormData = Pick<Schema, 'email' | 'password'>
@@ -31,7 +32,7 @@ export default function Login() {
   } = useForm<FormData>({ resolver: yupResolver(loginSchema) })
 
   const loginMutation = useMutation({
-    mutationFn: (body: FormData) => login(body)
+    mutationFn: (body: FormData) => authApi.login(body)
   })
 
   const onSubmit = handleSubmit((data) => {
@@ -41,6 +42,7 @@ export default function Login() {
         setIsAuthenticated(true)
         setProfile(data.data.data.user)
         navigate('/')
+        toast.success('Đăng nhập thành công')
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {

@@ -23,31 +23,31 @@ export default function AsideFilter() {
         <span>Tất cả danh mục</span>
       </Link>
       <ul>
-        <li className='py-2 pl-2'>
-          <Link className='text-sm relative px-3 text-orange font-semibold' to={path.home}>
+        <li className='py-2'>
+          <Link className='text-sm relative px-3 text-orange font-semibold inline-block' to={path.home}>
             <svg viewBox='0 0 4 7' className='w-2 h-2 absolute left-0 top-[50%] translate-y-[-50%] fill-orange'>
               <polygon points='4 3.5 0 0 0 7' />
             </svg>
             Điện Thoại & Phụ Kiện
           </Link>
         </li>
-        <li className='py-2 pl-2'>
-          <Link className='text-sm relative px-3' to={path.home}>
+        <li className='py-2'>
+          <Link className='text-sm relative px-3 inline-block' to={path.home}>
             Máy tính bảng
           </Link>
         </li>
-        <li className='py-2 pl-2'>
-          <Link className='text-sm relative px-3' to={path.home}>
+        <li className='py-2'>
+          <Link className='text-sm relative px-3 inline-block' to={path.home}>
             Điện thoại
           </Link>
         </li>
-        <li className='py-2 pl-2'>
-          <Link className='text-sm relative px-3' to={path.home}>
+        <li className='py-2'>
+          <Link className='text-sm relative px-3 inline-block' to={path.home}>
             Pin Gắn Trong, Cáp và Bộ Sạc
           </Link>
         </li>
-        <li className='py-2 pl-2'>
-          <Link className='text-sm relative px-3' to={path.home}>
+        <li className='py-2'>
+          <Link className='text-sm relative px-3 inline-block' to={path.home}>
             Ốp lưng, bao da, Miếng dán điện thoại
           </Link>
         </li>
