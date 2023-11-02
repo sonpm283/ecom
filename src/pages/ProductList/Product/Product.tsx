@@ -1,23 +1,23 @@
+import { Product as ProductType } from 'src/types/product.type'
+import { formatCurrency, formatNumberToSocialStyle } from 'src/utils/utils'
 interface ProductProps {
-  name: string
-  oldPrice: number
-  price: number
-  image: string
-  // rating?: number
+  product: ProductType
 }
 
+//props phải có kiểu là ProductProps tức là phải bao gồm trường product: ProductType
 export default function Product(props: ProductProps) {
-  const { name, oldPrice, price, image } = props
+  const { product } = props
+
   return (
-    <div className='shadow-sm hover:shadow-md transition hover:translate-y-[-3px] rounded-sm overflow-hidden'>
+    <div className='shadow-sm bg-white hover:shadow-md transition hover:translate-y-[-3px] rounded-sm overflow-hidden'>
       <div className='relative pt-[100%]'>
-        <img src={image} className='absolute top-0 left-0 w-full h-full object-cover' alt='' />
+        <img src={product.image} className='absolute top-0 left-0 w-full h-full object-cover' alt={product.name} />
       </div>
       <div className='p-2'>
-        <h3 className='line-clamp-2 text-sm min-h-[40px]'>{name}</h3>
+        <h3 className='line-clamp-2 text-sm min-h-[40px]'>{product.name}</h3>
         <div className='flex items-center gap-2 mt-3'>
-          <span className='text-sm text-gray-400 line-through'>₫{oldPrice}</span>
-          <span className='text-orange text-sm'>₫{price}</span>
+          <span className='text-sm text-gray-400 line-through'>₫{formatCurrency(product.price_before_discount)}</span>
+          <span className='text-orange text-sm'>₫{formatCurrency(product.price)}</span>
         </div>
         <div className='flex justify-end gap-1 mt-3'>
           <div className='flex items-center'>
@@ -50,7 +50,7 @@ export default function Product(props: ProductProps) {
           </div>
           <div className='text-xs'>
             <span className='ml-1'>Đã bán</span>
-            <span className='ml-1'>5.66k</span>
+            <span className='ml-1'>{formatNumberToSocialStyle(product.sold)}</span>
           </div>
         </div>
       </div>

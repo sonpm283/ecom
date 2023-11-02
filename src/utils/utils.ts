@@ -14,3 +14,19 @@ export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
 export function isAxiosUnprocessableEntityError<FormError>(error: unknown): error is AxiosError<FormError> {
   return isAxiosError<FormError>(error) && error.response?.status === HttpStatusCode.UnprocessableEntity
 }
+
+//format gía sản phẩm dạng: 3500000 ->  3.500.000(VND)
+export function formatCurrency(currency: number) {
+  return new Intl.NumberFormat('de-DE').format(currency)
+}
+
+//format số lượt bán dạng: 1k 2k 3k
+export function formatNumberToSocialStyle(value: number) {
+  return new Intl.NumberFormat('en', {
+    notation: 'compact',
+    maximumFractionDigits: 1
+  })
+    .format(value)
+    .replace('.', ',')
+    .toLowerCase()
+}

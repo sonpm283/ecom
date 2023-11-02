@@ -9,8 +9,6 @@ import useQueryParams from 'src/hooks/useQueryParams'
 export default function ProductList() {
   const queryParams = useQueryParams()
 
-  console.log(queryParams)
-
   //queryParams thay đổi sẽ gọi lại useQuery này
   const { data } = useQuery({
     queryKey: ['products', queryParams],
@@ -29,18 +27,14 @@ export default function ProductList() {
           <div className='col-span-10'>
             <SortProductList />
             <ul className='mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
-              {data?.data.data.products.map((product, index) => (
-                <li key={index}>
-                  <Link to=''>
-                    <Product
-                      name={product.name}
-                      oldPrice={product.price_before_discount}
-                      price={product.price}
-                      image={product.image}
-                    />
-                  </Link>
-                </li>
-              ))}
+              {data &&
+                data.data.data.products.map((product) => (
+                  <li key={product._id}>
+                    <Link to=''>
+                      <Product product={product} />
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </div>
         </div>
