@@ -5,9 +5,12 @@ import SortProductList from './SortProductList'
 import { useQuery } from '@tanstack/react-query'
 import productApi from 'src/apis/product.api'
 import useQueryParams from 'src/hooks/useQueryParams'
+import Pagination from 'src/components/Pagination'
+import { useState } from 'react'
 
 export default function ProductList() {
   const queryParams = useQueryParams()
+  const [page, setPage] = useState<number>(1)
 
   //queryParams thay đổi sẽ gọi lại useQuery này
   const { data } = useQuery({
@@ -36,6 +39,7 @@ export default function ProductList() {
                   </li>
                 ))}
             </ul>
+            <Pagination page={page} setPage={setPage} pageSize={50} />
           </div>
         </div>
       </div>
