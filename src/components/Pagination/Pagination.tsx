@@ -1,14 +1,19 @@
 import classNames from 'classnames'
+import { Link, createSearchParams } from 'react-router-dom'
+import path from 'src/constants/path'
+import { QueryConfig } from 'src/pages/ProductList/ProductList'
 
 interface PaginationProps {
-  page: number
-  setPage: React.Dispatch<React.SetStateAction<number>>
+  queryConfig: QueryConfig
   pageSize: number
 }
 
 const RAGE = 2
 export default function Pagination(props: PaginationProps) {
-  const { page, setPage, pageSize } = props
+  // truyền cả queryConfig sang thay vì truyền mỗi page để khi bấm vào pagination sẽ vẫn lấy được các params khác
+  // thay vì bấm vào và chỉ có ?page=1 thì thay vào đó ?page=1&limit=10&sort=asc được giữ nguyên
+  const { queryConfig, pageSize } = props
+  const page = Number(queryConfig.page)
 
   const renderPagination = () => {
     let dotAfter = false
@@ -19,9 +24,9 @@ export default function Pagination(props: PaginationProps) {
       if (!dotAfter) {
         dotAfter = true
         return (
-          <button key={index} className='bg-white rounded px-3 py-2 shadow-sm mx-2' disabled>
+          <span key={index} className='bg-white rounded px-3 py-2 shadow-sm mx-2'>
             ...
-          </button>
+          </span>
         )
       }
     }
@@ -32,9 +37,9 @@ export default function Pagination(props: PaginationProps) {
         dotBefore = true
 
         return (
-          <button key={index} className='bg-white rounded px-3 py-2 shadow-sm mx-2' disabled>
+          <span key={index} className='bg-white rounded px-3 py-2 shadow-sm mx-2'>
             ...
-          </button>
+          </span>
         )
       }
     }
@@ -58,26 +63,68 @@ export default function Pagination(props: PaginationProps) {
 
         // Nếu không thoả mãn các điều kiện trên thì sẽ render về các con số
         return (
-          <button
+          <Link
+            // thay vì chỉ link to={/page=1} thì sẽ link to 1 bộ params trước đó dạng ?page=1&limit=10 để khi bấm và pagination thì vẫn giữ nguyên bộ params cũ
+            to={{
+              pathname: path.home,
+              // sử dụng createSearchParams của 'react-router-dom'
+              // search là những param trên url được biến đổi từ queryConfig(1 object {page:1,imit:10 }) thành dạng ?page=1&limit=10 và ghi đè lại page là pageNumber
+
+              search: createSearchParams({
+                ...queryConfig,
+                page: pageNumber.toString()
+              }).toString()
+            }}
             key={index}
             className={classNames('bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer border', {
               //nếu page = pageNumber thì cho active: border-cyan-500
               'border-cyan-500': pageNumber === page,
               'border-transparent': pageNumber !== page
             })}
-            onClick={() => setPage(pageNumber)}
           >
             {pageNumber}
-          </button>
+          </Link>
         )
       })
   }
 
   return (
     <div className='flex flex-wrap mt-6 justify-center'>
-      <button className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer border'>Prev</button>
+      {page === 1 ? (
+        <button className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-not-allowed border'>Prev</button>
+      ) : (
+        <Link
+          to={{
+            pathname: path.home,
+            search: createSearchParams({
+              ...queryConfig,
+              page: (page - 1).toString()
+            }).toString()
+          }}
+          className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer border'
+        >
+          Prev
+        </Link>
+      )}
+
       {renderPagination()}
-      <button className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer border'>Next</button>
+
+      {page === pageSize ? (
+        <button className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-not-allowed border'>Next</button>
+      ) : (
+        <Link
+          to={{
+            pathname: path.home,
+            search: createSearchParams({
+              ...queryConfig,
+              page: (page + 1).toString()
+            }).toString()
+          }}
+          className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-pointer border'
+        >
+          Next
+        </Link>
+      )}
     </div>
   )
 }
