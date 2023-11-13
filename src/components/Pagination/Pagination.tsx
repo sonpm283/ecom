@@ -91,7 +91,7 @@ export default function Pagination(props: PaginationProps) {
   return (
     <div className='flex flex-wrap mt-6 justify-center'>
       {page === 1 ? (
-        <button className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-not-allowed border'>Prev</button>
+        <button className='bg-white/60 rounded px-3 py-2 shadow-sm mx-2 cursor-not-allowed border'>Prev</button>
       ) : (
         <Link
           to={{
@@ -110,7 +110,7 @@ export default function Pagination(props: PaginationProps) {
       {renderPagination()}
 
       {page === pageSize ? (
-        <button className='bg-white rounded px-3 py-2 shadow-sm mx-2 cursor-not-allowed border'>Next</button>
+        <button className='bg-white/60 rounded px-3 py-2 shadow-sm mx-2 cursor-not-allowed border'>Next</button>
       ) : (
         <Link
           to={{

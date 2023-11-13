@@ -35,8 +35,6 @@ export default function ProductList() {
     isUndefined
   )
 
-  console.log(queryConfig)
-
   //queryConfig thay đổi sẽ gọi lại useQuery này
   const { data } = useQuery({
     queryKey: ['products', queryConfig],
@@ -56,7 +54,7 @@ export default function ProductList() {
               <AsideFilter />
             </div>
             <div className='col-span-10'>
-              <SortProductList />
+              <SortProductList queryConfig={queryConfig} pageSize={data.data.data.pagination.page_size} />
               <ul className='mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
                 {data.data.data.products.map((product) => (
                   <li key={product._id}>
