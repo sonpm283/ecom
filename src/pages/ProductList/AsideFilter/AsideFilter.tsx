@@ -1,13 +1,27 @@
-import { Link } from 'react-router-dom'
+import { Link, createSearchParams } from 'react-router-dom'
 import Button from 'src/components/Button'
 import Input from 'src/components/Input'
 import path from 'src/constants/path'
+import Category from 'src/types/category.type'
+import { QueryConfig } from '../ProductList'
+import classNames from 'classnames'
 
-export default function AsideFilter() {
+interface Props {
+  categoriesData: Category[]
+  queryConfig: QueryConfig
+}
+
+export default function AsideFilter({ categoriesData, queryConfig }: Props) {
+  const { category } = queryConfig
   return (
     <div className='py-4'>
-      <Link to={path.home} className='flex items-center font-bold'>
-        <svg viewBox='0 0 12 10' className='w-3 h-4 mr-3'>
+      <Link
+        to={path.home}
+        className={classNames('flex items-center font-bold', {
+          'text-orange': !category
+        })}
+      >
+        <svg viewBox='0 0 12 10' className='w-3 h-4 mr-3 fill-current'>
           <g fillRule='evenodd' stroke='none' strokeWidth={1}>
             <g transform='translate(-373 -208)'>
               <g transform='translate(155 191)'>
@@ -23,34 +37,32 @@ export default function AsideFilter() {
         <span>Tất cả danh mục</span>
       </Link>
       <ul>
-        <li className='py-2'>
-          <Link className='text-sm relative px-3 text-orange font-semibold inline-block' to={path.home}>
-            <svg viewBox='0 0 4 7' className='w-2 h-2 absolute left-0 top-[50%] translate-y-[-50%] fill-orange'>
-              <polygon points='4 3.5 0 0 0 7' />
-            </svg>
-            Điện Thoại & Phụ Kiện
-          </Link>
-        </li>
-        <li className='py-2'>
-          <Link className='text-sm relative px-3 inline-block' to={path.home}>
-            Máy tính bảng
-          </Link>
-        </li>
-        <li className='py-2'>
-          <Link className='text-sm relative px-3 inline-block' to={path.home}>
-            Điện thoại
-          </Link>
-        </li>
-        <li className='py-2'>
-          <Link className='text-sm relative px-3 inline-block' to={path.home}>
-            Pin Gắn Trong, Cáp và Bộ Sạc
-          </Link>
-        </li>
-        <li className='py-2'>
-          <Link className='text-sm relative px-3 inline-block' to={path.home}>
-            Ốp lưng, bao da, Miếng dán điện thoại
-          </Link>
-        </li>
+        {categoriesData.map((categoryItem) => {
+          const isActive = category === categoryItem._id
+          return (
+            <li className='py-2' key={categoryItem._id}>
+              <Link
+                className={classNames('text-sm relative px-3 inline-block', {
+                  ' text-orange font-semibold': isActive
+                })}
+                to={{
+                  pathname: path.home,
+                  search: createSearchParams({
+                    ...queryConfig,
+                    category: categoryItem._id
+                  }).toString()
+                }}
+              >
+                {isActive && (
+                  <svg viewBox='0 0 4 7' className='w-2 h-2 absolute left-0 top-[50%] translate-y-[-50%] fill-orange'>
+                    <polygon points='4 3.5 0 0 0 7' />
+                  </svg>
+                )}
+                {categoryItem.name}
+              </Link>
+            </li>
+          )
+        })}
       </ul>
       <Link to={path.home} className='flex mt-8 items-center uppercase font-bold'>
         <svg
