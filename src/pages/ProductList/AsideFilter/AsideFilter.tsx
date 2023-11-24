@@ -1,18 +1,52 @@
 import { Link, createSearchParams } from 'react-router-dom'
 import Button from 'src/components/Button'
-import Input from 'src/components/Input'
 import path from 'src/constants/path'
 import Category from 'src/types/category.type'
 import { QueryConfig } from '../ProductList'
 import classNames from 'classnames'
+import InputNumber from 'src/components/InputNumber'
+import { useForm, Controller } from 'react-hook-form'
+import { schema } from 'src/utils/rules'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { ObjectSchema } from 'yup'
 
 interface Props {
   categoriesData: Category[]
   queryConfig: QueryConfig
 }
 
+type FormData = {
+  price_min: string
+  price_max: string
+}
+
+// Rules validate
+// Nếu có price_min và price_max thì price_max >= price_min
+// Còn không thì có price_min thì không có price_max và ngược lại
+
+const priceSchema = schema.pick(['price_min', 'price_max'])
+
 export default function AsideFilter({ categoriesData, queryConfig }: Props) {
   const { category } = queryConfig
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm<FormData>({
+    defaultValues: {
+      price_min: '',
+      price_max: ''
+    },
+    resolver: yupResolver<FormData>(priceSchema as ObjectSchema<FormData>)
+  })
+  const valueForm = watch()
+  console.log('error', errors)
+
+  const onSubmit = handleSubmit((data) => {
+    console.log(data)
+  })
+
   return (
     <div className='py-4'>
       <Link
@@ -87,22 +121,40 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
       <div className='bg-gray-300 h-[1px] my-4'></div>
       <div className='my-5'>
         <div>Khoảng Giá:</div>
-        <form className='mt-2'>
+        <form className='mt-2' onSubmit={onSubmit}>
           <div className='flex items-start'>
-            <Input
-              type='text'
-              className='grow'
-              name='from'
-              placeholder='from'
-              classNameInput='p-1 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm'
+            <Controller
+              control={control}
+              name='price_min'
+              render={({ field }) => {
+                return (
+                  <InputNumber
+                    type='text'
+                    className='grow'
+                    placeholder='From'
+                    classNameInput='p-1 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm'
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                )
+              }}
             />
             <div className='mx-2 mt-1 shrink-0'>-</div>
-            <Input
-              type='text'
-              className='grow'
-              name='to'
-              placeholder='to'
-              classNameInput='p-1 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm'
+            <Controller
+              control={control}
+              name='price_max'
+              render={({ field }) => {
+                return (
+                  <InputNumber
+                    type='text'
+                    className='grow'
+                    placeholder='To'
+                    classNameInput='p-1 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm'
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                )
+              }}
             />
           </div>
 
