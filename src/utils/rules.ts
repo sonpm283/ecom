@@ -1,12 +1,12 @@
-import { RegisterOptions, UseFormGetValues } from 'react-hook-form'
+// import { RegisterOptions, UseFormGetValues } from 'react-hook-form'
 import * as yup from 'yup'
 
 // kiểu của options của register
 // quy định rõ ràng các key cần validate để khi rules.email | rules.password sẽ gợi ý
 
-type Rules = {
-  [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions
-}
+// type Rules = {
+//   [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions
+// }
 //hoặc viết kiểu này:
 // type Rules = {
 //   email?: RegisterOptions
@@ -15,59 +15,62 @@ type Rules = {
 // }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getRules = (getValues?: UseFormGetValues<any>): Rules => ({
-  email: {
-    required: {
-      value: true,
-      message: 'Email là bắt buộc'
-    },
-    pattern: {
-      value: /^\S+@\S+\.\S+$/,
-      message: 'Email không đúng định dạng'
-    },
-    maxLength: {
-      value: 160,
-      message: 'Độ dài từ 5 - 160 ký tự'
-    },
-    minLength: {
-      value: 5,
-      message: 'Độ dài từ 5 đến 160 ký tự'
-    }
-  },
-  password: {
-    required: {
-      value: true,
-      message: 'Password là bắt buộc'
-    },
-    minLength: {
-      value: 6,
-      message: 'Độ dài từ 5 đến 160 ký tự'
-    },
-    maxLength: {
-      value: 160,
-      message: 'Độ dài từ 5 đến 160 ký tự'
-    }
-  },
-  confirm_password: {
-    required: {
-      value: true,
-      message: 'Nhập lại password là bắt buộc'
-    },
-    minLength: {
-      value: 6,
-      message: 'Độ dài từ 5 đến 160 ký tự'
-    },
-    maxLength: {
-      value: 160,
-      message: 'Độ dài từ 5 đến 160 ký tự'
-    },
-    validate:
-      typeof getValues === 'function'
-        ? (value) => value === getValues('password') || 'Nhập lại mật khẩu không khớp'
-        : undefined
-  }
-})
+// export const getRules = (getValues?: UseFormGetValues<any>): Rules => ({
+//   email: {
+//     required: {
+//       value: true,
+//       message: 'Email là bắt buộc'
+//     },
+//     pattern: {
+//       value: /^\S+@\S+\.\S+$/,
+//       message: 'Email không đúng định dạng'
+//     },
+//     maxLength: {
+//       value: 160,
+//       message: 'Độ dài từ 5 - 160 ký tự'
+//     },
+//     minLength: {
+//       value: 5,
+//       message: 'Độ dài từ 5 đến 160 ký tự'
+//     }
+//   },
+//   password: {
+//     required: {
+//       value: true,
+//       message: 'Password là bắt buộc'
+//     },
+//     minLength: {
+//       value: 6,
+//       message: 'Độ dài từ 5 đến 160 ký tự'
+//     },
+//     maxLength: {
+//       value: 160,
+//       message: 'Độ dài từ 5 đến 160 ký tự'
+//     }
+//   },
+//   confirm_password: {
+//     required: {
+//       value: true,
+//       message: 'Nhập lại password là bắt buộc'
+//     },
+//     minLength: {
+//       value: 6,
+//       message: 'Độ dài từ 5 đến 160 ký tự'
+//     },
+//     maxLength: {
+//       value: 160,
+//       message: 'Độ dài từ 5 đến 160 ký tự'
+//     },
+//     validate:
+//       typeof getValues === 'function'
+//         ? (value) => value === getValues('password') || 'Nhập lại mật khẩu không khớp'
+//         : undefined
+//   }
+// })
 
+// validate 2 trường hơp
+// 1, cả 2 trường đều có giá trị và price_max >= price_min
+// 2, chỉ có 1 trường được nhập
 function testPriceMinMax(this: yup.TestContext<yup.AnyObject>) {
   const { price_max, price_min } = this.parent as { price_min: string; price_max: string }
   if (price_min !== '' && price_max !== '') {

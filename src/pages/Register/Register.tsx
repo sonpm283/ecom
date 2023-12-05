@@ -12,7 +12,10 @@ import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/components/Button'
 
-type FormData = Schema
+// pick kiểu cho register form chỉ bao gồm email, password và confirm_password
+type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
+// chỉ cần pick email và password từ schema cho register form
+const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
 
 export default function Register() {
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
@@ -23,7 +26,7 @@ export default function Register() {
     setError,
     handleSubmit,
     formState: { errors }
-  } = useForm<FormData>({ resolver: yupResolver(schema) })
+  } = useForm<FormData>({ resolver: yupResolver(registerSchema) })
 
   const registerAccountMutation = useMutation({
     mutationFn: (body: Omit<FormData, 'confirm_password'>) => authApi.registerAccount(body)

@@ -1,4 +1,4 @@
-import { Link, createSearchParams } from 'react-router-dom'
+import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
 import path from 'src/constants/path'
 import Category from 'src/types/category.type'
@@ -6,19 +6,17 @@ import { QueryConfig } from '../ProductList'
 import classNames from 'classnames'
 import InputNumber from 'src/components/InputNumber'
 import { useForm, Controller } from 'react-hook-form'
-import { schema } from 'src/utils/rules'
+import { schema, Schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ObjectSchema } from 'yup'
+import { NoUndefinedField } from 'src/types/utils.type'
 
 interface Props {
   categoriesData: Category[]
   queryConfig: QueryConfig
 }
 
-type FormData = {
-  price_min: string
-  price_max: string
-}
+type FormData = NoUndefinedField<Pick<Schema, 'price_max' | 'price_min'>>
 
 // Rules validate
 // Nếu có price_min và price_max thì price_max >= price_min
@@ -31,20 +29,29 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
   const {
     control,
     handleSubmit,
-    watch,
+    trigger,
     formState: { errors }
   } = useForm<FormData>({
     defaultValues: {
       price_min: '',
       price_max: ''
     },
-    resolver: yupResolver<FormData>(priceSchema as ObjectSchema<FormData>)
+    resolver: yupResolver<FormData>(priceSchema as ObjectSchema<FormData>),
+    shouldFocusError: false
   })
-  const valueForm = watch()
-  console.log('error', errors)
 
+  const navigate = useNavigate()
+
+  // nếu vượt qua được validate thì sẽ chạy vào đây
   const onSubmit = handleSubmit((data) => {
-    console.log(data)
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...queryConfig,
+        price_max: data.price_max,
+        price_min: data.price_min
+      }).toString()
+    })
   })
 
   return (
@@ -133,8 +140,14 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
                     className='grow'
                     placeholder='From'
                     classNameInput='p-1 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm'
-                    onChange={field.onChange}
-                    value={field.value}
+                    {...field}
+                    onChange={(event) => {
+                      field.onChange(event)
+                      trigger('price_max')
+                    }}
+                    // value={field.value}
+                    // ref={field.ref}
+                    classNameError='hidden'
                   />
                 )
               }}
@@ -150,14 +163,21 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
                     className='grow'
                     placeholder='To'
                     classNameInput='p-1 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm'
-                    onChange={field.onChange}
-                    value={field.value}
+                    {...field}
+                    onChange={(event) => {
+                      field.onChange(event)
+                      trigger('price_min')
+                    }}
+                    // value={field.value}
+                    // ref={field.ref}
+                    classNameError='hidden'
                   />
                 )
               }}
             />
           </div>
-
+          {/* nếu price_min và price_max lỗi thì sẽ có error, lúc này nhập nhập price_max sẽ chỉ cập nhật lại error của price_max nên cần sử dụng trigger('price_min') validate lại */}
+          <div className='mt-1 text-red-600 min-h-[1.25rem] text-xs'>{errors.price_min?.message}</div>
           <Button className='w-full p-2 bg-orange text-white text-sm hover:bg-orange/80'>Áp dụng</Button>
         </form>
       </div>
