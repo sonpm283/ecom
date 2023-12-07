@@ -53,13 +53,13 @@ export default function SortProductList(props: SortProductListProps) {
   }
 
   return (
-    <div className='p-3 bg-gray-300/40'>
+    <div className='p-3 bg-gray-100/40'>
       <div className='flex items-center gap-4'>
         <span className='text-sm text-gray-600'>Sắp xếp theo</span>
         <button
           className={classNames('py-2 px-4 capitalize text-smrounded-sm', {
-            'bg-orange text-white hover:bg-orange/80': isActiveSortBy(sortBy.view),
-            'bg-white text-black hover:bg-slate-100': !isActiveSortBy(sortBy.view)
+            'border-b-primary border-b-2': isActiveSortBy(sortBy.view),
+            ' text-black hover:bg-slate-100': !isActiveSortBy(sortBy.view)
           })}
           onClick={() => handleSort(sortBy.view)}
         >
@@ -67,8 +67,8 @@ export default function SortProductList(props: SortProductListProps) {
         </button>
         <button
           className={classNames('py-2 px-4 capitalize text-sm', {
-            'bg-orange text-white hover:bg-orange/80': isActiveSortBy(sortBy.createdAt),
-            'bg-white text-black hover:bg-slate-100': !isActiveSortBy(sortBy.createdAt)
+            'border-b-primary border-b-2': isActiveSortBy(sortBy.createdAt),
+            ' text-black hover:bg-slate-100': !isActiveSortBy(sortBy.createdAt)
           })}
           onClick={() => handleSort(sortBy.createdAt)}
         >
@@ -76,8 +76,8 @@ export default function SortProductList(props: SortProductListProps) {
         </button>
         <button
           className={classNames('py-2 px-4 capitalize text-sm', {
-            'bg-orange text-white hover:bg-orange/80': isActiveSortBy(sortBy.sold),
-            'bg-white text-black hover:bg-slate-100': !isActiveSortBy(sortBy.sold)
+            'border-b-primary border-b-2': isActiveSortBy(sortBy.sold),
+            ' text-black hover:bg-slate-100': !isActiveSortBy(sortBy.sold)
           })}
           onClick={() => handleSort(sortBy.sold)}
         >
@@ -85,7 +85,7 @@ export default function SortProductList(props: SortProductListProps) {
         </button>
         <select
           className={classNames('p-2 capitalize text-sm text-left outline-none', {
-            'bg-orange text-white hover:bg-orange/80': isActiveSortBy(sortBy.price),
+            'bg-primary text-white hover:bg-primary/80': isActiveSortBy(sortBy.price),
             'bg-white text-black hover:bg-slate-100': !isActiveSortBy(sortBy.price)
           })}
           value={order || ''}
@@ -103,13 +103,13 @@ export default function SortProductList(props: SortProductListProps) {
         </select>
         <div className='ml-auto flex items-center'>
           <div>
-            <span className='text-orange text-sm'>{page}</span>
+            <span className='text-primary text-sm'>{page}</span>
             <span>/</span>
             <span className='text-sm'>{pageSize}</span>
           </div>
           <div className='ml-4 flex items-center'>
             {page === 1 ? (
-              <button className='grid place-items-center w-8 h-8 rounded-sm cursor-not-allowed bg-gray-100 border border-gray-300'>
+              <button className='grid place-items-center w-10 h-10 rounded-sm cursor-not-allowed bg-gray-100'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -130,7 +130,7 @@ export default function SortProductList(props: SortProductListProps) {
                     page: (page - 1).toString()
                   }).toString()
                 }}
-                className='grid place-items-center w-8 h-8 rounded-sm bg-gray-100 border border-gray-300'
+                className='grid place-items-center w-8 h-8 rounded-sm bg-gray-100'
               >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
@@ -146,7 +146,7 @@ export default function SortProductList(props: SortProductListProps) {
             )}
 
             {page === pageSize ? (
-              <button className='grid place-items-center w-8 h-8 rounded-sm cursor-not-allowed bg-gray-100 border border-gray-300'>
+              <button className='grid place-items-center w-8 h-8 rounded-sm cursor-not-allowed '>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -167,7 +167,7 @@ export default function SortProductList(props: SortProductListProps) {
                     page: (page + 1).toString()
                   }).toString()
                 }}
-                className='grid place-items-center w-8 h-8 rounded-sm bg-gray-100 border border-gray-300'
+                className='grid place-items-center w-8 h-8 rounded-sm bg-gray-100 '
               >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'

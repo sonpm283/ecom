@@ -58,7 +58,6 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
   })
 
   const handleRemoveAll = () => {
-    console.log(omit(queryConfig, ['price_min', 'price_max', 'rating_filter', 'category']))
     reset()
     navigate({
       pathname: path.home,
@@ -68,27 +67,14 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
   }
 
   return (
-    <div className='py-4'>
+    <div className='px-2 py-4 bg-white'>
       <Link
         to={path.home}
-        className={classNames('flex items-center font-bold', {
-          'text-orange': !category
+        className={classNames('flex items-center', {
+          'text-gray-500': !category
         })}
       >
-        <svg viewBox='0 0 12 10' className='w-3 h-4 mr-3 fill-current'>
-          <g fillRule='evenodd' stroke='none' strokeWidth={1}>
-            <g transform='translate(-373 -208)'>
-              <g transform='translate(155 191)'>
-                <g transform='translate(218 17)'>
-                  <path d='m0 2h2v-2h-2zm4 0h7.1519633v-2h-7.1519633z' />
-                  <path d='m0 6h2v-2h-2zm4 0h7.1519633v-2h-7.1519633z' />
-                  <path d='m0 10h2v-2h-2zm4 0h7.1519633v-2h-7.1519633z' />
-                </g>
-              </g>
-            </g>
-          </g>
-        </svg>
-        <span>Tất cả danh mục</span>
+        <span className='text-gray-500 text-sm px-3'>Danh Mục Sản Phẩm</span>
       </Link>
       <ul>
         {categoriesData.map((categoryItem) => {
@@ -96,8 +82,8 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
           return (
             <li className='py-2' key={categoryItem._id}>
               <Link
-                className={classNames('text-sm relative px-3 inline-block', {
-                  ' text-orange font-semibold': isActive
+                className={classNames('text-sm text-gray-500 relative px-3 inline-block', {
+                  ' text-primary': isActive
                 })}
                 to={{
                   pathname: path.home,
@@ -108,7 +94,7 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
                 }}
               >
                 {isActive && (
-                  <svg viewBox='0 0 4 7' className='w-2 h-2 absolute left-0 top-[50%] translate-y-[-50%] fill-orange'>
+                  <svg viewBox='0 0 4 7' className='w-2 h-2 absolute left-0 top-[50%] translate-y-[-50%] fill-primary'>
                     <polygon points='4 3.5 0 0 0 7' />
                   </svg>
                 )}
@@ -118,29 +104,9 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
           )
         })}
       </ul>
-      <Link to={path.home} className='flex mt-8 items-center uppercase font-bold'>
-        <svg
-          enableBackground='new 0 0 15 15'
-          viewBox='0 0 15 15'
-          x={0}
-          y={0}
-          className='w-3 h-3 mr-3 fill-current stroke-current'
-        >
-          <g>
-            <polyline
-              fill='none'
-              points='5.5 13.2 5.5 5.8 1.5 1.2 13.5 1.2 9.5 5.8 9.5 10.2'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeMiterlimit={10}
-            />
-          </g>
-        </svg>
-        <span>Bộ lọc tìm kiếm</span>
-      </Link>
       <div className='bg-gray-300 h-[1px] my-4'></div>
       <div className='my-5'>
-        <div>Khoảng Giá:</div>
+        <span className='text-sm text-gray-500'>Chọn khoảng giá:</span>
         <form className='mt-2' onSubmit={onSubmit}>
           <div className='flex items-start'>
             <Controller
@@ -151,8 +117,8 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
                   <InputNumber
                     type='text'
                     className='grow'
-                    placeholder='From'
-                    classNameInput='p-1 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm'
+                    placeholder='0'
+                    classNameInput='p-1 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm '
                     {...field}
                     onChange={(event) => {
                       field.onChange(event)
@@ -174,7 +140,7 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
                   <InputNumber
                     type='text'
                     className='grow'
-                    placeholder='To'
+                    placeholder='0'
                     classNameInput='p-1 w-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-sm outline-none text-sm'
                     {...field}
                     onChange={(event) => {
@@ -191,20 +157,17 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
           </div>
           {/* nếu price_min và price_max lỗi thì sẽ có error, lúc này nhập nhập price_max sẽ chỉ cập nhật lại error của price_max nên cần sử dụng trigger('price_min') validate lại */}
           <div className='mt-1 text-red-600 min-h-[1.25rem] text-xs'>{errors.price_min?.message}</div>
-          <Button className='w-full p-2 bg-orange text-white text-sm hover:bg-orange/80'>Áp dụng</Button>
+          <Button className='w-full p-1 text-primary border rounded-sm border-primary text-sm'>Áp dụng</Button>
         </form>
       </div>
       <div className='bg-gray-300 h-[1px] my-4'></div>
-      <div className='text-sm'>Đánh giá</div>
+      <div className='text-sm text-gray-500'>Đánh giá</div>
 
       {/* RatingStar */}
 
       <RatingStars queryConfig={queryConfig} />
       <div className='bg-gray-300 h-[1px] my-4'></div>
-      <Button
-        className='w-full p-2 bg-orange text-white text-sm hover:bg-orange/80 uppercase'
-        onClick={handleRemoveAll}
-      >
+      <Button className='w-full p-1 text-primary border rounded-sm border-primary text-sm' onClick={handleRemoveAll}>
         Xoá tất cả
       </Button>
     </div>

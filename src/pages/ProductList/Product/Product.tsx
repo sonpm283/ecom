@@ -18,7 +18,7 @@ export default function Product(props: ProductProps) {
         <h3 className='line-clamp-2 text-sm min-h-[40px]'>{product.name}</h3>
         <div className='flex items-center gap-2 mt-3'>
           <span className='text-sm text-gray-400 line-through'>₫{formatCurrency(product.price_before_discount)}</span>
-          <span className='text-orange text-sm'>₫{formatCurrency(product.price)}</span>
+          <span className='text-[#27272a] text-md'>₫{formatCurrency(product.price)}</span>
         </div>
         <div className='flex justify-end gap-1 mt-3'>
           <ProductRating rating={product.rating} />
