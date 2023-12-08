@@ -16,7 +16,7 @@ export default function SortProductList(props: SortProductListProps) {
   const page = Number(queryConfig.page)
   // nếu queryConfig thì mặc đinh lấy bằng view/createdAt do mình quy định
   // const { sort_by = sortBy.view } = queryConfig
-  const { sort_by = sortBy.createdAt, order } = queryConfig
+  const { sort_by = sortBy.sold, order } = queryConfig
   const navigate = useNavigate()
 
   // sortByValue: 'createdAt' | 'view' | 'sold' | 'price' lấy từ ProductListConfig loại bỏ undefined bằng Exclude
@@ -53,32 +53,41 @@ export default function SortProductList(props: SortProductListProps) {
   }
 
   return (
-    <div className='p-3 bg-gray-100/40'>
+    <div className='p-3 bg-white'>
       <div className='flex items-center gap-4'>
         <span className='text-sm text-gray-600'>Sắp xếp theo</span>
         <button
-          className={classNames('py-2 px-4 capitalize text-smrounded-sm', {
-            'border-b-primary border-b-2': isActiveSortBy(sortBy.view),
-            ' text-black hover:bg-slate-100': !isActiveSortBy(sortBy.view)
-          })}
+          className={classNames(
+            'py-2 px-4 capitalize text-smrounded-sm relative after:absolute after:w-[50%] after:translate-x-[-50%] after:rounded-sm after:left-[50%] after:h-[4px] after:bottom-0 transition text-sm after:transition',
+            {
+              'after:bg-primary text-primary': isActiveSortBy(sortBy.view),
+              'text-black hover:after:bg-primary hover:text-primary': !isActiveSortBy(sortBy.view)
+            }
+          )}
           onClick={() => handleSort(sortBy.view)}
         >
           Phổ biến
         </button>
         <button
-          className={classNames('py-2 px-4 capitalize text-sm', {
-            'border-b-primary border-b-2': isActiveSortBy(sortBy.createdAt),
-            ' text-black hover:bg-slate-100': !isActiveSortBy(sortBy.createdAt)
-          })}
+          className={classNames(
+            'py-2 px-4 capitalize text-smrounded-sm relative after:absolute after:w-[50%] after:translate-x-[-50%] after:rounded-sm after:left-[50%] after:h-[4px] after:bottom-0 transition text-sm after:transition',
+            {
+              'after:bg-primary': isActiveSortBy(sortBy.createdAt),
+              'text-black hover:after:bg-primary hover:text-primary': !isActiveSortBy(sortBy.createdAt)
+            }
+          )}
           onClick={() => handleSort(sortBy.createdAt)}
         >
           Mới nhất
         </button>
         <button
-          className={classNames('py-2 px-4 capitalize text-sm', {
-            'border-b-primary border-b-2': isActiveSortBy(sortBy.sold),
-            ' text-black hover:bg-slate-100': !isActiveSortBy(sortBy.sold)
-          })}
+          className={classNames(
+            'py-2 px-4 capitalize text-smrounded-sm relative after:absolute after:w-[50%] after:translate-x-[-50%] after:rounded-sm after:left-[50%] after:h-[4px] after:bottom-0 transition text-sm after:transition',
+            {
+              'after:bg-primary': isActiveSortBy(sortBy.sold),
+              'text-black hover:after:bg-primary hover:text-primary': !isActiveSortBy(sortBy.sold)
+            }
+          )}
           onClick={() => handleSort(sortBy.sold)}
         >
           Bán chạy
@@ -86,7 +95,7 @@ export default function SortProductList(props: SortProductListProps) {
         <select
           className={classNames('p-2 capitalize text-sm text-left outline-none', {
             'bg-primary text-white hover:bg-primary/80': isActiveSortBy(sortBy.price),
-            'bg-white text-black hover:bg-slate-100': !isActiveSortBy(sortBy.price)
+            'text-black cursor-pointer bg-[#f5f5fa]': !isActiveSortBy(sortBy.price)
           })}
           value={order || ''}
           onChange={(e) => handleOrderSort(e.target.value as Exclude<ProductListConfig['order'], undefined>)}
@@ -109,7 +118,7 @@ export default function SortProductList(props: SortProductListProps) {
           </div>
           <div className='ml-4 flex items-center'>
             {page === 1 ? (
-              <button className='grid place-items-center w-10 h-10 rounded-sm cursor-not-allowed bg-gray-100'>
+              <button className='grid place-items-center w-10 h-10 rounded-sm cursor-not-allowed'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -130,7 +139,7 @@ export default function SortProductList(props: SortProductListProps) {
                     page: (page - 1).toString()
                   }).toString()
                 }}
-                className='grid place-items-center w-8 h-8 rounded-sm bg-gray-100'
+                className='grid place-items-center w-8 h-8 rounded-sm'
               >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
@@ -167,7 +176,7 @@ export default function SortProductList(props: SortProductListProps) {
                     page: (page + 1).toString()
                   }).toString()
                 }}
-                className='grid place-items-center w-8 h-8 rounded-sm bg-gray-100 '
+                className='grid place-items-center w-8 h-8 rounded-sm'
               >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'

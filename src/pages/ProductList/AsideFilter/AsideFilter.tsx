@@ -27,7 +27,7 @@ type FormData = NoUndefinedField<Pick<Schema, 'price_max' | 'price_min'>>
 const priceSchema = schema.pick(['price_min', 'price_max'])
 
 export default function AsideFilter({ categoriesData, queryConfig }: Props) {
-  const { category } = queryConfig
+  const { category, price_max, price_min } = queryConfig
   const {
     control,
     handleSubmit,
@@ -66,6 +66,22 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
     })
   }
 
+  const handleFilterPriceClick = (priceMin: number, priceMax: number) => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...queryConfig,
+        price_min: String(priceMin),
+        price_max: priceMax == 0 ? '' : String(priceMax)
+      }).toString()
+    })
+  }
+
+  const isActiveFitlerPrice = (pirceMin: number, priceMax: number) => {
+    const newPriceMax = priceMax === 0 ? '' : String(priceMax)
+    return newPriceMax === price_max && String(pirceMin) === price_min
+  }
+
   return (
     <div className='px-2 py-4 bg-white'>
       <Link
@@ -74,7 +90,7 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
           'text-gray-500': !category
         })}
       >
-        <span className='text-gray-500 text-sm px-3'>Danh Mục Sản Phẩm</span>
+        <span className='text-gray-700 text-sm px-3 hover:text-primary'>Danh Mục Sản Phẩm</span>
       </Link>
       <ul>
         {categoriesData.map((categoryItem) => {
@@ -82,8 +98,8 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
           return (
             <li className='py-2' key={categoryItem._id}>
               <Link
-                className={classNames('text-sm text-gray-500 relative px-3 inline-block', {
-                  ' text-primary': isActive
+                className={classNames('text-sm hover:text-primary text-gray-500 relative px-3 inline-block', {
+                  'text-primary': isActive
                 })}
                 to={{
                   pathname: path.home,
@@ -105,8 +121,59 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
         })}
       </ul>
       <div className='bg-gray-300 h-[1px] my-4'></div>
-      <div className='my-5'>
-        <span className='text-sm text-gray-500'>Chọn khoảng giá:</span>
+      <div className='text-sm text-gray-700'>Giá</div>
+      <div className='inline-flex flex-col gap-2 mt-2'>
+        <div
+          tabIndex={0}
+          aria-hidden={true}
+          role='button'
+          className={classNames('border text-[12px] w-max bg-[#eee] py-[4px] px-[12px] rounded-[12px]', {
+            'border border-primary bg-[#f0f8ff] text-primary order-[-1]': isActiveFitlerPrice(0, 300000)
+            // 'text-[#38383d]': !isActiveFitlerPrice(0, 300000)
+          })}
+          onClick={() => handleFilterPriceClick(0, 300000)}
+        >
+          Dưới 300.000
+        </div>
+        <div
+          tabIndex={0}
+          aria-hidden={true}
+          role='button'
+          className={classNames('border text-[12px] w-max text-[#38383d] bg-[#eee] py-[4px] px-[12px] rounded-[12px]', {
+            'border border-primary bg-[#f0f8ff] text-primary order-[-1]': isActiveFitlerPrice(300000, 700000)
+            // 'text-[#38383d]': !isActiveFitlerPrice(300000, 700000)
+          })}
+          onClick={() => handleFilterPriceClick(300000, 700000)}
+        >
+          300.000 &rarr; 700.000
+        </div>
+        <div
+          tabIndex={0}
+          aria-hidden={true}
+          role='button'
+          className={classNames('border text-[12px] w-max text-[#38383d] bg-[#eee] py-[4px] px-[12px] rounded-[12px]', {
+            'border border-primary bg-[#f0f8ff] text-primary order-[-1]': isActiveFitlerPrice(700000, 1800000)
+            // 'text-[#38383d]': !isActiveFitlerPrice(700000, 1800000)
+          })}
+          onClick={() => handleFilterPriceClick(700000, 1800000)}
+        >
+          700.000 &rarr; 1.800.000
+        </div>
+        <div
+          tabIndex={0}
+          aria-hidden={true}
+          role='button'
+          className={classNames('border text-[12px] w-max text-[#38383d] bg-[#eee] py-[4px] px-[12px] rounded-[12px]', {
+            'border border-primary bg-[#f0f8ff] text-primary order-[-1]': isActiveFitlerPrice(1800000, 0)
+            // 'text-[#38383d]': !isActiveFitlerPrice(1800000, 0)
+          })}
+          onClick={() => handleFilterPriceClick(1800000, 0)}
+        >
+          Trên 1.800.000
+        </div>
+      </div>
+      <div className='my-4'>
+        <span className='text-sm text-gray-700'>Chọn khoảng giá:</span>
         <form className='mt-2' onSubmit={onSubmit}>
           <div className='flex items-start'>
             <Controller
@@ -162,9 +229,6 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
       </div>
       <div className='bg-gray-300 h-[1px] my-4'></div>
       <div className='text-sm text-gray-500'>Đánh giá</div>
-
-      {/* RatingStar */}
-
       <RatingStars queryConfig={queryConfig} />
       <div className='bg-gray-300 h-[1px] my-4'></div>
       <Button className='w-full p-1 text-primary border rounded-sm border-primary text-sm' onClick={handleRemoveAll}>

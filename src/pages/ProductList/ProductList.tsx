@@ -64,7 +64,7 @@ export default function ProductList() {
             </div>
             <div className='col-span-10'>
               <SortProductList queryConfig={queryConfig} pageSize={productsData.data.data.pagination.page_size} />
-              <ul className='mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
+              <ul className='mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
                 {productsData.data.data.products.map((product) => (
                   <li key={product._id}>
                     <Link to=''>

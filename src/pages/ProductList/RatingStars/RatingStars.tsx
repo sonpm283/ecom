@@ -19,13 +19,13 @@ export default function RatingStars({ queryConfig }: Props) {
     })
   }
   return (
-    <ul className='my-3'>
+    <ul className='my-1'>
       {Array(5)
         .fill(0)
         .map((_, index) => (
           <li className='py-1' key={index}>
             <div
-              className='flex items-center text-sm'
+              className='flex items-center text-xs'
               onClick={() => handleRatingStar(5 - index)}
               tabIndex={0}
               aria-hidden='true'
@@ -90,7 +90,7 @@ export default function RatingStars({ queryConfig }: Props) {
                     </svg>
                   )
                 })}
-              {index !== 0 && <span className='ml-1'>trở lên</span>}
+              <span className='ml-1 text-sm'>từ {5 - index} sao</span>
             </div>
           </li>
         ))}
