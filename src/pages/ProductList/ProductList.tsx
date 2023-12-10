@@ -1,13 +1,12 @@
-import { Link } from 'react-router-dom'
-import AsideFilter from './AsideFilter'
-import Product from './Product'
-import SortProductList from './SortProductList'
+import AsideFilter from './components/AsideFilter'
 import { useQuery } from '@tanstack/react-query'
 import productApi from 'src/apis/product.api'
 import Pagination from 'src/components/Pagination'
 import { ProductListConfig } from 'src/types/product.type'
 import categoryApi from 'src/apis/category.api'
 import useQueryConfig from 'src/hooks/useQueryConfig'
+import SortProductList from './components/SortProductList'
+import Product from './components/Product'
 
 export default function ProductList() {
   const queryConfig = useQueryConfig()
@@ -42,9 +41,7 @@ export default function ProductList() {
               <ul className='mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
                 {productsData.data.data.products.map((product) => (
                   <li key={product._id}>
-                    <Link to=''>
-                      <Product product={product} />
-                    </Link>
+                    <Product product={product} />
                   </li>
                 ))}
               </ul>

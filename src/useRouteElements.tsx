@@ -9,6 +9,7 @@ import Profile from './components/Profile'
 import { useContext } from 'react'
 import { AppContext } from './contexts/app.context'
 import path from './constants/path'
+import ProductDetail from './pages/ProductDetail'
 
 // nếu isAuthenticated = true thì sẽ pass qua được ProtectedRoute và có thể truy cập được đến cái path(children) bên trong(các path cần phải đăng nhập mới vào được)
 function ProtectedRoute() {
@@ -60,6 +61,14 @@ export default function useRouteElements() {
           )
         }
       ]
+    },
+    {
+      path: path.productDetail,
+      element: (
+        <MainLayout>
+          <ProductDetail />
+        </MainLayout>
+      )
     },
     {
       path: '',

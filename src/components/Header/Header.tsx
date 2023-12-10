@@ -155,7 +155,7 @@ export default function Header() {
           )}
         </div>
         <div className='grid grid-cols-12 gap-4 mt-4 items-center'>
-          <Link to={path.home} className='col-span-2 flex justify-center'>
+          <Link to={path.home} className='col-span-1 flex'>
             <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' className='w-12'>
               <path
                 d='M35 32a3 3 0 0 0-6 0v2h6zM27 51h10a3.003 3.003 0 0 0 3-3V36H24v12a3.003 3.003 0 0 0 3 3zm9-13a1 1 0 1 1-1 1 1 1 0 0 1 1-1zm-8 0a1 1 0 1 1-1 1 1 1 0 0 1 1-1z'
@@ -174,7 +174,7 @@ export default function Header() {
               />
             </svg>
           </Link>
-          <form className='col-span-9' onSubmit={onSubmitSearch}>
+          <form className='col-span-10' onSubmit={onSubmitSearch}>
             <div className='bg-white rounded-sm p-1 flex border'>
               <input
                 type='text'
