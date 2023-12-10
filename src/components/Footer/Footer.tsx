@@ -4,10 +4,7 @@ export default function Footer() {
       <div className='container'>
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm text-[#0000008a]'>
           <div className='lg:col-span-1'>© 2023 hiveshop. Tất cả các quyền được bảo lưu.</div>
-          <div className='lg:col-span-2 '>
-            Quốc gia & Khu vực: Singapore Indonesia Đài Loan Thái Lan Malaysia Việt Nam Philippines Brazil México
-            Colombia Chile
-          </div>
+          <div className='lg:col-span-2 '>Quốc gia & Khu vực: Việt Nam</div>
         </div>
         <div className='text-center mt-20 text-xs text-[#000000a6]'>
           <ul className='flex justify-center'>

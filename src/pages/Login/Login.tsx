@@ -91,7 +91,7 @@ export default function Login() {
               <div className='mt-4'>
                 <Button
                   type='submit'
-                  className='flex items-center justify-center w-full text-center py-4 px-2 uppercase text-white text-sm bg-red-500 hover:bg-red-600 transition-all'
+                  className='flex items-center justify-center w-full text-center py-4 px-2 uppercase text-white text-sm bg-primary hover:bg-primary  transition-all'
                   isLoading={loginMutation.isLoading}
                   disabled={loginMutation.isLoading}
                 >
@@ -101,7 +101,7 @@ export default function Login() {
 
               <div className='flex items-center justify-center mt-8'>
                 <span className='text-slate-400'>Bạn chưa có tài khoản?</span>
-                <Link className='text-red-400 ml-1' to={path.register}>
+                <Link className='text-primary ml-1' to={path.register}>
                   Đăng ký
                 </Link>
               </div>

@@ -107,7 +107,7 @@ export default function Register() {
               <div className='mt-4'>
                 <Button
                   type='submit'
-                  className='flex items-center justify-center w-full text-center py-4 px-2 uppercase text-white text-sm bg-red-500 hover:bg-red-600 transition-all'
+                  className='flex items-center justify-center w-full text-center py-4 px-2 uppercase text-white text-sm bg-primary transition-all'
                   isLoading={registerAccountMutation.isLoading}
                   disabled={registerAccountMutation.isLoading}
                 >
@@ -117,7 +117,7 @@ export default function Register() {
 
               <div className='flex items-center justify-center mt-8'>
                 <span className='text-slate-400'>Bạn đã có tài khoản?</span>
-                <Link className='text-red-400 ml-1' to='/login'>
+                <Link className='text-primary ml-1' to='/login'>
                   Đăng nhập
                 </Link>
               </div>

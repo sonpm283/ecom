@@ -51,7 +51,7 @@ export default function Popover({ children, className, renderPopover, as: Elemen
               {/* arrow hình tam giác sẽ chạy theo linh hoạt */}
               <span
                 ref={arrowRef}
-                className='border-x-transparent border-t-transparent border-b-white border-[11px] absolute translate-y-[-95%] z-10'
+                className='border-x-transparent border-t-transparent border-b-gray-200 border-[11px] absolute translate-y-[-95%] z-10'
                 style={{
                   left: middlewareData.arrow?.x,
                   top: middlewareData.arrow?.y
