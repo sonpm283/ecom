@@ -7,6 +7,7 @@ import categoryApi from 'src/apis/category.api'
 import useQueryConfig from 'src/hooks/useQueryConfig'
 import SortProductList from './components/SortProductList'
 import Product from './components/Product'
+import Breadcrumbs from 'src/components/Breadcrumbs'
 
 export default function ProductList() {
   const queryConfig = useQueryConfig()
@@ -29,8 +30,9 @@ export default function ProductList() {
   })
 
   return (
-    <div className='bg-[#f5f5fa] py-6'>
+    <div className='bg-[#f5f5fa]'>
       <div className='container'>
+        <Breadcrumbs />
         {productsData && (
           <div className='grid grid-cols-12 gap-2'>
             <div className='col-span-2'>
