@@ -16,7 +16,7 @@ export default function SortProductList(props: SortProductListProps) {
   const page = Number(queryConfig.page)
   // nếu queryConfig thì mặc đinh lấy bằng view/createdAt do mình quy định
   // const { sort_by = sortBy.view } = queryConfig
-  const { sort_by = sortBy.sold, order } = queryConfig
+  const { sort_by = sortBy.createdAt, order } = queryConfig
   const navigate = useNavigate()
 
   // sortByValue: 'createdAt' | 'view' | 'sold' | 'price' lấy từ ProductListConfig loại bỏ undefined bằng Exclude
