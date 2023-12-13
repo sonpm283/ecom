@@ -4,7 +4,7 @@ import User from '../User'
 export default function Commnent() {
   return (
     <div className='grid grid-cols-12 gap-6 py-4 border-t'>
-      <div className='col-span-4'>
+      <div className='col-span-full md:col-span-4'>
         <User />
         <div className='mt-3'>
           <div className='flex items-center justify-between mb-3'>
@@ -32,7 +32,7 @@ export default function Commnent() {
           </div>
         </div>
       </div>
-      <div className='col-span-8'>
+      <div className='col-span-full md:col-span-8'>
         <div className=' flex items-center gap-3'>
           <div className='flex items-center gap-0.5'>
             <ProductRating rating={5} />

@@ -32,7 +32,7 @@ export default function ProductList() {
   return (
     <div className='bg-[#f5f5fa]'>
       <div className='container'>
-        <Breadcrumbs />
+      <Breadcrumbs links={[{ name: 'Home', path: '/' }, { name: 'Product', path: '/product' }]} current='Current Page' />
         {productsData && (
           <div className='grid grid-cols-12 gap-2'>
             <div className='col-span-2'>

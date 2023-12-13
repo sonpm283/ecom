@@ -11,9 +11,52 @@ import { useForm } from 'react-hook-form'
 import { schema, Schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { omit } from 'lodash'
+import { useState, useEffect } from 'react'
+import useDebounce from 'src/hooks/useDebounce'
 
 export default function Header() {
   const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useContext(AppContext)
+  const [searchTerm, setSearchTerm] = useState<string>('')
+  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  
+  type FormData = Pick<Schema, 'name'>
+  const nameSchema = schema.pick(['name'])
+
+  const { register } = useForm<FormData>({
+    defaultValues: {
+      name: ''
+    },
+    resolver: yupResolver(nameSchema)
+  })
+
+  const handleSearch = (value: string) => {
+    const config = queryConfig.order
+      ? omit(
+        {
+          ...queryConfig,
+          name: value
+        },
+        ['order', 'sort_by']
+      )
+      : {
+        ...queryConfig,
+        name: value
+      }
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(config).toString()
+    })
+  }
+
+  useEffect(() => {
+      console.log('Debounced value:', debouncedSearchTerm);
+      handleSearch(debouncedSearchTerm)
+  }, [debouncedSearchTerm])
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value)
+  }
+
   const logoutMutation = useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
@@ -28,38 +71,29 @@ export default function Header() {
     //set lại thì cả app re-render // state nằm ở context cao nhất
   }
 
-  type FormData = Pick<Schema, 'name'>
-  const nameSchema = schema.pick(['name'])
-
   const queryConfig = useQueryConfig()
   const navigate = useNavigate()
 
-  const { register, handleSubmit } = useForm<FormData>({
-    defaultValues: {
-      name: ''
-    },
-    resolver: yupResolver(nameSchema)
-  })
-
-  const onSubmitSearch = handleSubmit((data) => {
-    // nếu query config có order thì sau khi search sẽ loại bỏ ['order', 'sort_by']
-    const config = queryConfig.order
-      ? omit(
-          {
-            ...queryConfig,
-            name: data.name
-          },
-          ['order', 'sort_by']
-        )
-      : {
-          ...queryConfig,
-          name: data.name
-        }
-    navigate({
-      pathname: path.home,
-      search: createSearchParams(config).toString()
-    })
-  })
+  // Search by Submit button
+  // const onSubmitSearch = handleSubmit((data) => {
+  //   // nếu query config có order thì sau khi search sẽ loại bỏ ['order', 'sort_by']
+  //   const config = queryConfig.order
+  //     ? omit(
+  //       {
+  //         ...queryConfig,
+  //         name: data.name
+  //       },
+  //       ['order', 'sort_by']
+  //     )
+  //     : {
+  //       ...queryConfig,
+  //       name: data.name
+  //     }
+  //   navigate({
+  //     pathname: path.home,
+  //     search: createSearchParams(config).toString()
+  //   })
+  // })
   return (
     <header className='pb-5 pt-2 bg-white text-gray-700'>
       <div className='container'>
@@ -72,13 +106,15 @@ export default function Header() {
               height='72'
             />
           </Link>
-          <form className='col-span-8' onSubmit={onSubmitSearch}>
+          <form className='col-span-8'>
             <div className='bg-white rounded-md p-1 flex border'>
               <input
                 type='text'
                 className='text-black px-3 py-2 flex-grow border-none outline-none bg-transparent'
                 placeholder='Tìm kiếm...'
                 {...register('name')}
+                value={searchTerm}
+                onChange={handleChange}
               />
               <button
                 className='rounded-sm py-2 px-4 flex-shrink-0 text-primary font-semibold text-sm border-l'

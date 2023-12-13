@@ -64,10 +64,8 @@ export default function ProductDetail() {
     const rect = event.currentTarget.getBoundingClientRect()
     const image = imageRef.current as HTMLImageElement
     const { naturalHeight, naturalWidth } = image
-    // Cách 1: Lấy offsetX, offsetY đơn giản khi đã xử lý được bubble event
     // const { offsetX, offsetY } = event.nativeEvent
 
-    // Cách 2: Lấy offsetX, offsetY khi không xử lý được bubble event
     const offsetX = event.pageX - (rect.x + window.scrollX)
     const offsetY = event.pageY - (rect.y + window.scrollY)
 
@@ -94,9 +92,9 @@ export default function ProductDetail() {
   return (
     <div className='bg-[#f5f5fa]'>
       <div className='container '>
-        <Breadcrumbs />
+      <Breadcrumbs links={[{ name: 'Home', path: '/' }, { name: 'Product', path: '/product' }]} current='Current Page' />
         <div className='grid grid-cols-12 gap-4 items-start'>
-          <div className='col-span-4 p-3 bg-white rounded-md sticky top-[10px]'>
+          <div className='col-span-full lg:col-span-4 p-3 bg-white rounded-md md:sticky md:top-[10px]'>
             <div className='flex flex-col'>
               <div
                 className='relative pt-[100%] rounded-md overflow-hidden border border-x-gray-200'
@@ -149,7 +147,7 @@ export default function ProductDetail() {
               </div>
             </div>
           </div>
-          <div className='col-span-5 '>
+          <div className='col-span-full lg:col-span-5 '>
             <div className='bg-white rounded-md p-3'>
               <div className='flex items-center gap-2'>
                 <img
@@ -289,9 +287,9 @@ export default function ProductDetail() {
             <div className='p-3 bg-white rounded-md mt-5'>
               <p className='text-md font-medium'>Sản phẩm tương tự</p>
               {productsData && (
-                <div className='mt-6 grid grid-cols-4 gap-y-5 gap-x-1'>
+                <div className='mt-6 grid grid-cols-4 gap-y-2 lg:gap-y-5 gap-x-2 lg:gap-x-1'>
                   {productsData.data.data.products.map((product) => (
-                    <div className='col-span-1' key={product._id}>
+                    <div className='col-span-2 lg:col-span-1' key={product._id}>
                       <Product product={product} />
                     </div>
                   ))}
@@ -307,7 +305,7 @@ export default function ProductDetail() {
               />
             </div>
           </div>
-          <div className='col-span-3 p-3 bg-white rounded-md flex flex-col gap-4 sticky top-[10px]'>
+          <div className='col-span-full lg:col-span-3 p-3 bg-white rounded-md flex flex-col gap-4 lg:sticky lg:top-[10px]'>
             <div className='flex items-center gap-2 pb-3 border-b'>
               <img
                 srcSet='https://vcdn.tikicdn.com/cache/w100/ts/seller/21/ce/5c/b52d0b8576680dc3666474ae31b091ec.jpg 1x, https://vcdn.tikicdn.com/cache/w100/ts/seller/21/ce/5c/b52d0b8576680dc3666474ae31b091ec.jpg 2x'
@@ -397,7 +395,7 @@ export default function ProductDetail() {
         </div>
 
         <div className='grid grid-cols-12 gap-4 mt-5'>
-          <div className='col-span-9 p-3 bg-white rounded-md sticky top-[10px]'>
+          <div className='col-span-12 md:col-span-9 p-3 bg-white rounded-md lg:sticky lg:top-[10px]'>
             <FilterComment />
             <div className='mt-5'>
               <Commnent />
