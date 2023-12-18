@@ -6,15 +6,16 @@ import ProductRating from 'src/components/ProductRating'
 import { formatCurrency, formatNumberToSocialStyle, rateSale } from 'src/utils/utils'
 import Product from '../ProductList/components/Product'
 import { Product as ProductType, ProductListConfig } from 'src/types/product.type'
-import InputNumber from 'src/components/InputNumber'
 import Button from 'src/components/Button'
 import Breadcrumbs from 'src/components/Breadcrumbs'
 import FilterComment from './components/FilterComment'
 import Commnent from './components/Comment'
 import DOMPurify from 'dompurify'
+import QuantityController from 'src/components/QuantityController/QuantityController'
 
 export default function ProductDetail() {
   const [activeImage, setActiveImage] = useState<string>('')
+  const [buyCount, setBuyCount] = useState<number>(1)
   const [currentIndexImages, setCurrentIndexImages] = useState<number[]>([0, 5])
   const imageRef = useRef<HTMLImageElement>(null)
   const { nameId } = useParams()
@@ -82,6 +83,10 @@ export default function ProductDetail() {
     imageRef.current?.removeAttribute('style')
   }
 
+  const hanleBuyCount = (value: number) => {
+    setBuyCount(value)
+  }
+
   useEffect(() => {
     if (product && product.images.length > 0) {
       setActiveImage(product.images[0])
@@ -92,7 +97,13 @@ export default function ProductDetail() {
   return (
     <div className='bg-[#f5f5fa]'>
       <div className='container '>
-      <Breadcrumbs links={[{ name: 'Home', path: '/' }, { name: 'Product', path: '/product' }]} current='Current Page' />
+        <Breadcrumbs
+          links={[
+            { name: 'Home', path: '/' },
+            { name: 'Product', path: '/product' }
+          ]}
+          current='Current Page'
+        />
         <div className='grid grid-cols-12 gap-4 items-start'>
           <div className='col-span-full lg:col-span-4 p-3 bg-white rounded-md md:sticky md:top-[10px]'>
             <div className='flex flex-col'>
@@ -348,30 +359,13 @@ export default function ProductDetail() {
             </div>
             <div>
               <span className='font-medium text-md'>Số lượng</span>
-              <div className='flex items-center gap-1 mt-4'>
-                <button type='button' className='w-[34px] h-[32px] border flex items-center justify-center rounded-md'>
-                  <img
-                    src='https://frontend.tikicdn.com/_desktop-next/static/img/pdp_revamp_v2/icons-remove.svg'
-                    alt='remove-icon'
-                    width={20}
-                    height={20}
-                  />
-                </button>
-                <InputNumber
-                  classNameInput='p-3 w-full h-full border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-md outline-none text-sm text-center'
-                  classNameError='hidden'
-                  className='w-[40px] h-[32px] rounded-md'
-                  value={1}
-                />
-                <button type='button' className='w-[34px] h-[32px] border flex items-center justify-center rounded-sm'>
-                  <img
-                    src='https://frontend.tikicdn.com/_desktop-next/static/img/pdp_revamp_v2/icons-add.svg'
-                    alt='add-icon'
-                    width={20}
-                    height={20}
-                  />
-                </button>
-              </div>
+              <QuantityController
+                onIncrease={hanleBuyCount}
+                onDecrease={hanleBuyCount}
+                value={buyCount}
+                max={product.quantity}
+                onType={hanleBuyCount}
+              />
             </div>
             <div>
               <p className='font-medium text-md'>Tạm tính</p>
