@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
@@ -12,6 +12,10 @@ import FilterComment from './components/FilterComment'
 import Commnent from './components/Comment'
 import DOMPurify from 'dompurify'
 import QuantityController from 'src/components/QuantityController/QuantityController'
+import purchaseApi from 'src/apis/purchase.api'
+import { queryClient } from 'src/main'
+import { purchaseStatus } from 'src/constants/purchase'
+import { toast } from 'react-toastify'
 
 export default function ProductDetail() {
   const [activeImage, setActiveImage] = useState<string>('')
@@ -39,6 +43,8 @@ export default function ProductDetail() {
     staleTime: 3 * 60 * 1000,
     enabled: Boolean(product)
   })
+
+  const addToCartMutation = useMutation(purchaseApi.addToCart)
 
   const currentImages = useMemo(
     () => (product ? product.images.slice(...currentIndexImages) : []),
@@ -92,6 +98,19 @@ export default function ProductDetail() {
       setActiveImage(product.images[0])
     }
   }, [product])
+
+  const addToCart = () => {
+    addToCartMutation.mutate(
+      { buy_count: buyCount, product_id: product?._id as string },
+      {
+        onSuccess: () => {
+          toast.success('Đã thêm vào giỏ', { autoClose: 1000 })
+          // sau khi thêm sản phẩm vào giỏ hàng thành công invalidateQueries dùng để query lại data
+          queryClient.invalidateQueries(['purchases', { status: purchaseStatus.inCart }])
+        }
+      }
+    )
+  }
 
   if (!product) return null
   return (
@@ -194,78 +213,6 @@ export default function ProductDetail() {
                   - {rateSale(product.price_before_discount, product.price)}
                 </span>
               </div>
-
-              <div className='mt-4'>
-                <span className='font-semibold text-sm'>Màu</span>
-                <div className='flex gap-2 mt-3'>
-                  <div className='px-2 py-1 border rounded-md cursor-pointer flex items-center gap-1 text-sm relative before:absolute before:w-full before:h-full before:border-2 before:border-primary before:left-0 before:rounded-md hover:before:border-primary'>
-                    <picture className='webpimg-container' style={{ width: 42, height: 42 }}>
-                      <source
-                        type='image/webp'
-                        srcSet='https://salt.tikicdn.com/cache/100x100/ts/product/a2/38/6c/ce008c63f4ac771550439da44f5f8ee8.png.webp 1x, https://salt.tikicdn.com/cache/100x100/ts/product/a2/38/6c/ce008c63f4ac771550439da44f5f8ee8.png.webp 2x'
-                      />
-                      <img
-                        alt='thumbnail'
-                        src='https://salt.tikicdn.com/cache/280x280/ts/product/a2/38/6c/ce008c63f4ac771550439da44f5f8ee8.png'
-                        width={42}
-                        height={42}
-                        srcSet='https://salt.tikicdn.com/cache/100x100/ts/product/a2/38/6c/ce008c63f4ac771550439da44f5f8ee8.png 1x, https://salt.tikicdn.com/cache/100x100/ts/product/a2/38/6c/ce008c63f4ac771550439da44f5f8ee8.png 2x'
-                        className='WebpImg__StyledImg-sc-h3ozu8-0 fWjUGo'
-                        style={{ width: 42, height: 42 }}
-                      />
-                    </picture>
-                    Hồng
-                  </div>
-                  <div className='px-2 py-1 border rounded-md cursor-pointer flex items-center gap-1 text-sm relative before:absolute before:w-full before:h-full before:border-2 before:border-transparent before:left-0 before:rounded-md hover:before:border-primary'>
-                    <picture className='webpimg-container' style={{ width: 42, height: 42 }}>
-                      <source
-                        type='image/webp'
-                        srcSet='https://salt.tikicdn.com/cache/100x100/ts/product/dd/2b/a6/fefd132c5ba9b5629c0119f57549e5d4.png.webp 1x, https://salt.tikicdn.com/cache/100x100/ts/product/dd/2b/a6/fefd132c5ba9b5629c0119f57549e5d4.png.webp 2x'
-                      />
-                      <img
-                        alt='thumbnail'
-                        src='https://salt.tikicdn.com/cache/280x280/ts/product/dd/2b/a6/fefd132c5ba9b5629c0119f57549e5d4.png'
-                        width={42}
-                        height={42}
-                        srcSet='https://salt.tikicdn.com/cache/100x100/ts/product/dd/2b/a6/fefd132c5ba9b5629c0119f57549e5d4.png 1x, https://salt.tikicdn.com/cache/100x100/ts/product/dd/2b/a6/fefd132c5ba9b5629c0119f57549e5d4.png 2x'
-                        className='WebpImg__StyledImg-sc-h3ozu8-0 fWjUGo'
-                        style={{ width: 42, height: 42 }}
-                      />
-                    </picture>
-                    Trắng
-                  </div>
-                  <div className='px-2 py-1 border rounded-md cursor-pointer flex items-center gap-1 text-sm relative before:absolute before:w-full before:h-full before:border-2 before:border-transparent before:left-0 before:rounded-md hover:before:border-primary'>
-                    <picture className='webpimg-container' style={{ width: 42, height: 42 }}>
-                      <source
-                        type='image/webp'
-                        srcSet='https://salt.tikicdn.com/cache/100x100/ts/product/dd/42/95/ae7976cda4f1ae1de6be8c5e84df1815.png.webp 1x, https://salt.tikicdn.com/cache/100x100/ts/product/dd/42/95/ae7976cda4f1ae1de6be8c5e84df1815.png.webp 2x'
-                      />
-                      <img
-                        alt='thumbnail'
-                        src='https://salt.tikicdn.com/cache/280x280/ts/product/dd/42/95/ae7976cda4f1ae1de6be8c5e84df1815.png'
-                        width={42}
-                        height={42}
-                        srcSet='https://salt.tikicdn.com/cache/100x100/ts/product/dd/42/95/ae7976cda4f1ae1de6be8c5e84df1815.png 1x, https://salt.tikicdn.com/cache/100x100/ts/product/dd/42/95/ae7976cda4f1ae1de6be8c5e84df1815.png 2x'
-                        className='WebpImg__StyledImg-sc-h3ozu8-0 fWjUGo'
-                        style={{ width: 42, height: 42 }}
-                      />
-                    </picture>
-                    Xanh dương
-                  </div>
-                </div>
-              </div>
-
-              <div className='mt-4'>
-                <span className='font-semibold text-sm'>Dung lượng</span>
-                <div className='flex gap-2 mt-3'>
-                  <div className='p-2 border rounded-md cursor-pointer text-sm relative before:absolute before:w-full before:h-full before:border-2 before:border-primary before:left-0 before:rounded-md hover:before:border-primary before:top-0'>
-                    128gb
-                  </div>
-                  <div className='p-2 border rounded-md cursor-pointer text-sm relative before:absolute before:w-full before:h-full before:border-2 before:border-transparent before:left-0 before:rounded-md hover:before:border-primary before:top-0'>
-                    256gb
-                  </div>
-                </div>
-              </div>
             </div>
             <div className='p-3 bg-white rounded-md mt-5'>
               <p className='text-md font-medium'>Thông tin vận chuyển</p>
@@ -298,7 +245,7 @@ export default function ProductDetail() {
             <div className='p-3 bg-white rounded-md mt-5'>
               <p className='text-md font-medium'>Sản phẩm tương tự</p>
               {productsData && (
-                <div className='mt-6 grid grid-cols-4 gap-y-2 lg:gap-y-5 gap-x-2 lg:gap-x-1'>
+                <div className='mt-6 grid grid-cols-3 gap-y-2 lg:gap-y-5 gap-x-2 lg:gap-x-1'>
                   {productsData.data.data.products.map((product) => (
                     <div className='col-span-2 lg:col-span-1' key={product._id}>
                       <Product product={product} />
@@ -378,11 +325,11 @@ export default function ProductDetail() {
               <Button className='flex items-center justify-center w-full text-center p-2 text-white text-sm bg-[#ff424e] transition-all rounded-md'>
                 Mua ngay
               </Button>
-              <Button className='flex items-center justify-center w-full text-center p-2 font-medium text-sm bg-white border border-primary text-primary transition-all rounded-md'>
+              <Button
+                onClick={addToCart}
+                className='flex items-center justify-center w-full text-center p-2 font-medium text-sm bg-white border border-primary text-primary transition-all rounded-md'
+              >
                 Thêm vào giỏ
-              </Button>
-              <Button className='flex items-center justify-center w-full text-center p-2 font-medium text-sm bg-white border border-primary text-primary transition-all rounded-md'>
-                Mua trả góp từ 2.332.500₫/tháng
               </Button>
             </div>
           </div>

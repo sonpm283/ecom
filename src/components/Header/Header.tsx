@@ -1,6 +1,6 @@
 import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import Popover from '../Popover'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { authApi } from 'src/apis/auth.api'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
@@ -11,6 +11,9 @@ import { useForm } from 'react-hook-form'
 import { schema, Schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { omit } from 'lodash'
+import { purchaseStatus } from 'src/constants/purchase'
+import purchaseApi from 'src/apis/purchase.api'
+import { formatCurrency } from 'src/utils/utils'
 
 export default function Header() {
   const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useContext(AppContext)
@@ -39,6 +42,11 @@ export default function Header() {
     //set lại thì cả app re-render // state nằm ở context cao nhất
   }
 
+  const { data: productInCartData } = useQuery({
+    queryKey: ['purchases', { status: purchaseStatus.inCart }],
+    queryFn: () => purchaseApi.getPurchases({ status: purchaseStatus.inCart })
+  })
+
   const queryConfig = useQueryConfig()
   const navigate = useNavigate()
 
@@ -65,8 +73,8 @@ export default function Header() {
   return (
     <header className='pb-5 pt-2 bg-white text-gray-700'>
       <div className='container'>
-        <div className='grid grid-cols-12 gap-4 mt-4 items-center'>
-          <Link to={path.home} className='col-span-1 flex'>
+        <div className='flex flex-col md:flex-row flex-wrap items-center justify-between gap-x-10'>
+          <Link to={path.home} className='c flex flex-shrink-0 block w-[72px] h-[72px]'>
             <img
               src='https://salt.tikicdn.com/ts/upload/c1/64/f7/4e6e925ea554fc698123ea71ed7bda26.png'
               alt='tiki-logo'
@@ -74,23 +82,20 @@ export default function Header() {
               height='72'
             />
           </Link>
-          <form className='col-span-8' onSubmit={onSubmitSearch}>
+          <form className='flex-1 max-w-full w-full' onSubmit={onSubmitSearch}>
             <div className='bg-white rounded-md p-1 flex border'>
               <input
                 type='text'
-                className='text-black px-3 py-2 flex-grow border-none outline-none bg-transparent'
+                className='text-black px-3 py-2 flex-1 border-none outline-none bg-transparent'
                 placeholder='Tìm kiếm...'
                 {...register('name')}
               />
-              <button
-                className='rounded-sm py-2 px-4 flex-shrink-0 text-primary font-semibold text-sm border-l'
-                type='submit'
-              >
+              <button className='rounded-sm py-2 px-4 text-primary font-semibold text-sm border-l' type='submit'>
                 Tìm kiếm
               </button>
             </div>
           </form>
-          <div className='flex col-span-3 items-center justify-between gap-2'>
+          <div className='flex items-center justify-between gap-2 hidden md:flex'>
             <div className='flex'>
               <Popover
                 className='flex items-center py-1 cursor-pointer'
@@ -186,71 +191,29 @@ export default function Header() {
                     <div className='p-2'>
                       <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
                       <div className='mt-5'>
-                        <div className='mt-4 flex'>
-                          <div className='flex-shrink-0'>
-                            <img src='' alt='anh' className='w-11 h-11 object-cover' />
-                          </div>
-                          <div className='flex-grow ml-2 overflow-hidden'>
-                            <div className='truncate'>
-                              [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy SUNHOUSE SH334 16, 20, 24 cm
-                            </div>
-                          </div>
-                          <div className='ml-2 flex-shrink-0'>
-                            <span className='text-primary'>₫469.000</span>
-                          </div>
-                        </div>
-                        <div className='mt-4 flex'>
-                          <div className='flex-shrink-0'>
-                            <img src='' alt='anh' className='w-11 h-11 object-cover' />
-                          </div>
-                          <div className='flex-grow ml-2 overflow-hidden'>
-                            <div className='truncate'>
-                              [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy SUNHOUSE SH334 16, 20, 24 cm
-                            </div>
-                          </div>
-                          <div className='ml-2 flex-shrink-0'>
-                            <span className='text-primary'>₫469.000</span>
-                          </div>
-                        </div>
-                        <div className='mt-4 flex'>
-                          <div className='flex-shrink-0'>
-                            <img src='' alt='anh' className='w-11 h-11 object-cover' />
-                          </div>
-                          <div className='flex-grow ml-2 overflow-hidden'>
-                            <div className='truncate'>
-                              [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy SUNHOUSE SH334 16, 20, 24 cm
-                            </div>
-                          </div>
-                          <div className='ml-2 flex-shrink-0'>
-                            <span className='text-primary'>₫469.000</span>
-                          </div>
-                        </div>
-                        <div className='mt-4 flex'>
-                          <div className='flex-shrink-0'>
-                            <img src='' alt='anh' className='w-11 h-11 object-cover' />
-                          </div>
-                          <div className='flex-grow ml-2 overflow-hidden'>
-                            <div className='truncate'>
-                              [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy SUNHOUSE SH334 16, 20, 24 cm
-                            </div>
-                          </div>
-                          <div className='ml-2 flex-shrink-0'>
-                            <span className='text-primary'>₫469.000</span>
-                          </div>
-                        </div>
-                        <div className='mt-4 flex'>
-                          <div className='flex-shrink-0'>
-                            <img src='' alt='anh' className='w-11 h-11 object-cover' />
-                          </div>
-                          <div className='flex-grow ml-2 overflow-hidden'>
-                            <div className='truncate'>
-                              [LIFEMCMBP2 -12% đơn 250K] Bộ Nồi Inox 3 Đáy SUNHOUSE SH334 16, 20, 24 cm
-                            </div>
-                          </div>
-                          <div className='ml-2 flex-shrink-0'>
-                            <span className='text-primary'>₫469.000</span>
-                          </div>
-                        </div>
+                        {!productInCartData ? (
+                          <p>Không có sản phẩm nào đang được mua</p>
+                        ) : (
+                          <>
+                            {productInCartData?.data.data.map((purchase) => (
+                              <div className='mt-4 flex' key={purchase._id}>
+                                <div className='flex-shrink-0'>
+                                  <img
+                                    src={purchase.product.image}
+                                    alt={purchase.product.name}
+                                    className='w-11 h-11 object-cover'
+                                  />
+                                </div>
+                                <div className='flex-grow ml-2 overflow-hidden'>
+                                  <div className='truncate'>{purchase.product.name}</div>
+                                </div>
+                                <div className='ml-2 flex-shrink-0'>
+                                  <span className='text-primary'>{formatCurrency(purchase.product.price)}đ</span>
+                                </div>
+                              </div>
+                            ))}
+                          </>
+                        )}
                       </div>
                       <div className='flex mt-6 items-center justify-between'>
                         <div className='capitalize text-xs text-gray-500'>Thêm hàng vào giỏ</div>

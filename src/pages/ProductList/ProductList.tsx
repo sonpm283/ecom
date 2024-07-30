@@ -35,12 +35,12 @@ export default function ProductList() {
       <Breadcrumbs links={[{ name: 'Home', path: '/' }, { name: 'Product', path: '/product' }]} current='Current Page' />
         {productsData && (
           <div className='grid grid-cols-12 gap-2'>
-            <div className='col-span-2'>
+            <div className='col-span-0 md:col-span-2'>
               <AsideFilter categoriesData={categoriesData?.data.data || []} queryConfig={queryConfig} />
             </div>
-            <div className='col-span-10'>
+            <div className='col-span-12 md:col-span-10'>
               <SortProductList queryConfig={queryConfig} pageSize={productsData.data.data.pagination.page_size} />
-              <ul className='mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
+              <ul className='mt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
                 {productsData.data.data.products.map((product) => (
                   <li key={product._id}>
                     <Product product={product} />

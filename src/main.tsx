@@ -7,7 +7,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { AppProvider } from './contexts/app.context'
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       // ngăn chặn fecth lại api khi focus ra ngoài website

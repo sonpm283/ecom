@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import { AuthReponse } from 'src/types/auth.type'
 import { clearLS, getAccessTokenFromLS, saveAccessTokenToLS, setProfileToLS } from './auth'
 import path from 'src/constants/path'
+
 class Http {
   instance: AxiosInstance
   private accessToken: string
@@ -12,7 +13,7 @@ class Http {
 
     this.accessToken = getAccessTokenFromLS()
     this.instance = axios.create({
-      baseURL: 'https://api-ecom.duthanhduoc.com/',
+      baseURL: process.env.API_ENDPOINT || '',
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'

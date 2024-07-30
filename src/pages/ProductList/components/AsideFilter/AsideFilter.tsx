@@ -83,7 +83,7 @@ export default function AsideFilter({ categoriesData, queryConfig }: Props) {
   }
 
   return (
-    <div className='px-2 py-4 bg-white'>
+    <div className='px-2 py-4 bg-white hidden md:block'>
       <Link
         to={path.home}
         className={classNames('flex items-center', {
