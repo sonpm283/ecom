@@ -104,7 +104,7 @@ export default function ProductDetail() {
       { buy_count: buyCount, product_id: product?._id as string },
       {
         onSuccess: () => {
-          toast.success('Đã thêm vào giỏ', { autoClose: 1000 })
+          toast.success('Đã thêm vào giỏ', { autoClose: 1000, position: 'bottom-right' })
           // sau khi thêm sản phẩm vào giỏ hàng thành công invalidateQueries dùng để query lại data
           queryClient.invalidateQueries(['purchases', { status: purchaseStatus.inCart }])
         }

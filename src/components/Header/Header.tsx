@@ -20,6 +20,7 @@ export default function Header() {
 
   type FormData = Pick<Schema, 'name'>
   const nameSchema = schema.pick(['name'])
+  const MAX_PURCHASES = 5
 
   const { register, handleSubmit } = useForm<FormData>({
     defaultValues: {
@@ -42,10 +43,12 @@ export default function Header() {
     //set lại thì cả app re-render // state nằm ở context cao nhất
   }
 
-  const { data: productInCartData } = useQuery({
+  const { data: purchaseInCartData } = useQuery({
     queryKey: ['purchases', { status: purchaseStatus.inCart }],
     queryFn: () => purchaseApi.getPurchases({ status: purchaseStatus.inCart })
   })
+
+  const productInCart = purchaseInCartData?.data.data
 
   const queryConfig = useQueryConfig()
   const navigate = useNavigate()
@@ -184,19 +187,25 @@ export default function Header() {
                 </div>
               )}
             </div>
-            <div className='col-span-1 justify-self-end'>
+            <div className='col-span-1 justify-self-end relative'>
+              {productInCart && (
+                <span className='absolute top-[-5px] w-3 h-3 bg-red-500 p-2 flex items-center justify-center text-white text-[10px] rounded-full right-[-5px]'>
+                  {productInCart.length}
+                </span>
+              )}
+
               <Popover
                 renderPopover={
                   <div className='bg-white relative shadow-md rounded-sm border border-gray-200 max-w-[400px] text-sm'>
                     <div className='p-2'>
                       <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
                       <div className='mt-5'>
-                        {!productInCartData ? (
+                        {!productInCart ? (
                           <p>Không có sản phẩm nào đang được mua</p>
                         ) : (
                           <>
-                            {productInCartData?.data.data.map((purchase) => (
-                              <div className='mt-4 flex' key={purchase._id}>
+                            {productInCart.slice(0, MAX_PURCHASES).map((purchase) => (
+                              <div className='mt-2 flex p-2 hover:bg-gray-200' key={purchase._id}>
                                 <div className='flex-shrink-0'>
                                   <img
                                     src={purchase.product.image}
@@ -212,14 +221,19 @@ export default function Header() {
                                 </div>
                               </div>
                             ))}
+                            <div className='flex mt-6 items-center justify-between'>
+                              <div className='capitalize text-xs text-gray-500'>
+                                {productInCart.length > MAX_PURCHASES
+                                  ? productInCart.length - MAX_PURCHASES
+                                  : MAX_PURCHASES + ''}{' '}
+                                Thêm hàng vào giỏ
+                              </div>
+                              <button className='capitalize bg-primary hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
+                                Xem giỏ hàng
+                              </button>
+                            </div>
                           </>
                         )}
-                      </div>
-                      <div className='flex mt-6 items-center justify-between'>
-                        <div className='capitalize text-xs text-gray-500'>Thêm hàng vào giỏ</div>
-                        <button className='capitalize bg-primary hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
-                          Xem giỏ hàng
-                        </button>
                       </div>
                     </div>
                   </div>
